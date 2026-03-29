@@ -15,21 +15,5 @@ spec:
   template:
     apiVersion: serving.kserve.io/v1beta1
     metadata:
-      annotations:
-        autoscaling.knative.dev/metric: rps
-        autoscaling.knative.dev/target: "100"
-    spec:
-      predictor:
-        containers:
-          - name: kserve-container
-            image: docker.io/shoosthuizen/sentiment-classifier:latest
-            ports:
-              - containerPort: 8080
-                protocol: TCP
-            resources:
-              requests:
-                cpu: "1"
-                memory: "2Gi"
-              limits:
-                cpu: "2"
-                memory: "4Gi"
+      annotations: '{"autoscaling.knative.dev/metric": "rps", "autoscaling.knative.dev/target": "100"}'
+    spec: '{"predictor": {"containers": [{"name": "kserve-container", "image": "docker.io/shoosthuizen/sentiment-classifier:latest", "ports": [{"containerPort": 8080, "protocol": "TCP"}], "resources": {"requests": {"cpu": "1", "memory": "2Gi"}, "limits": {"cpu": "2", "memory": "4Gi"}}}]}}'
