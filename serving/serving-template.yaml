@@ -1,0 +1,35 @@
+apiVersion: ai.sap.com/v1alpha1
+kind: ServingTemplate
+metadata:
+  name: sentiment-classifier
+  annotations:
+    scenarios.ai.sap.com/description: "DistilBERT binary sentiment classifier"
+    scenarios.ai.sap.com/name: "sentiment-classifier"
+    executables.ai.sap.com/description: "FastAPI inference server"
+    executables.ai.sap.com/name: "sentiment-server"
+  labels:
+    scenarios.ai.sap.com/id: "sentiment-classifier"
+    executables.ai.sap.com/id: "sentiment-server"
+    ai.sap.com/version: "1.0.0"
+spec:
+  template:
+    apiVersion: serving.kserve.io/v1beta1
+    metadata:
+      annotations:
+        autoscaling.knative.dev/metric: rps
+        autoscaling.knative.dev/target: "100"
+    spec:
+      predictor:
+        containers:
+          - name: kserve-container
+            image: docker.io/shoosthuizen/sentiment-classifier:latest
+            ports:
+              - containerPort: 8080
+                protocol: TCP
+            resources:
+              requests:
+                cpu: "1"
+                memory: "2Gi"
+              limits:
+                cpu: "2"
+                memory: "4Gi"
